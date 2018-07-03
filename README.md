@@ -1,4 +1,6 @@
-#  Simple banking simulator
+# Fix and refactor
+
+##  Simple bank 
 
 Application is built using 2 classes. 
 
@@ -8,7 +10,7 @@ Bank class models registering account and getting existing account (by id).
 
 Both classes have a lot of bugs.
 
-# Simulation
+## Simulation
 
 There is a 3rd class BankRunner which has a main method.  
 This class runs a simulation, where some number of accounts are created.
@@ -17,7 +19,7 @@ After that the overall amount of money on accounts should not change.
 
 This seems to not be the case.
 
-# Task
+##  Task
 
 Your job is to find bugs and other problems in the implementation.
 1. Make corrections to the Account and Bank class. (if You do not have time, please simply list problems that You see).
