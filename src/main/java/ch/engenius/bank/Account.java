@@ -3,29 +3,50 @@ package ch.engenius.bank;
 import java.math.BigDecimal;
 
 public class Account {
-    private double money;
 
-    public void withdraw(double amount) {
-        if ((money - amount) < 0) {
-            throw new IllegalStateException("not enough credits on account");
-        }
-        setMoney(money - amount);
+	private static final String NOT_ENOUGH_CREDIT_ERROR_MESSAGE = "Not enough credits on account.";
+	private static final String NEGATIVE_AMOUNT_MESSAGE = "Amount cannot be negative.";
 
-    }
+	private BigDecimal money;
 
-    public void deposit(double amount) {
-        setMoney(money + amount);
-    }
+	public Account(BigDecimal money) {
+		boolean isNegativeAmount = isNegativeAmount(money);
+		if (isNegativeAmount) {
+			throw new IllegalStateException(NEGATIVE_AMOUNT_MESSAGE);
+		}
+		this.money = money;
+	}
 
-    public double getMoney() {
-        return money;
-    }
+	public synchronized void withdraw(BigDecimal transferMoney) {
+		boolean isNegativeAmount = isNegativeAmount(transferMoney);
+		if (isNegativeAmount) {
+			throw new IllegalStateException(NEGATIVE_AMOUNT_MESSAGE);
+		}
+		boolean cannotWithdrawAmount = cannotWithdrawAmount(transferMoney);
+		if (cannotWithdrawAmount) {
+			throw new IllegalStateException(NOT_ENOUGH_CREDIT_ERROR_MESSAGE);
+		}
+		money = money.subtract(transferMoney);
+	}
 
-    public void setMoney(double money) {
-        this.money = money;
-    }
+	public synchronized void deposit(BigDecimal transferMoney) {
+		boolean isNegativeAmount = isNegativeAmount(transferMoney);
+		if (isNegativeAmount) {
+			throw new IllegalStateException(NEGATIVE_AMOUNT_MESSAGE);
+		}
+		money = money.add(transferMoney);
+	}
 
-    public BigDecimal getMoneyAsBigDecimal() {
-        return BigDecimal.valueOf(money);
-    }
+	public synchronized BigDecimal getMoney() {
+		return money;
+	}
+
+	private boolean cannotWithdrawAmount(BigDecimal transferMoney) {
+		BigDecimal amount = money.subtract(transferMoney);
+		return amount.compareTo(BigDecimal.ZERO) < 0;
+	}
+
+	private boolean isNegativeAmount(BigDecimal transferMoney) {
+		return transferMoney.compareTo(BigDecimal.ZERO) < 0;
+	}
 }
