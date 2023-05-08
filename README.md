@@ -61,3 +61,8 @@ Other ideas:
 different currencies. For the sake of simplicity, in this case there is no new class for Money because it is implied
 that currency is always the same.(https://www.martinfowler.com/eaaCatalog/money.html)
 - By encapsulating money class, operations such as adding and subtracting money can be moved to the Money class, following the single responsibility principle.
+
+
+Below is a sequence diagram that represents one random money transfer operation:
+
+![Bad_Bank_Random_Operation_Sequence_Diagram](https://user-images.githubusercontent.com/104908897/236853704-7e98f1c5-733d-46e7-9af4-aafd4f533015.png)
