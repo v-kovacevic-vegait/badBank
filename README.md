@@ -37,23 +37,24 @@ can execute these methods at a time. This ensures that the account balance is al
 - Deposit action is executed before withdraw action, which can lead to inconsistent state when withdraw action is disabled 
 and exception is thrown due to account not having enough money. To solve this problem, order of these methods is switched. 
 In case of introducing database, these two methods should be considered as one transaction, therefore if either of them fails,
-a rollback should be executed.
+a rollback should be executed. Based on that, the project implements a simple mechanism to simulate a rollback operation by creating a new Account object whenever a withdraw or deposit operation is performed. This approach allows the old object to be set again in the hash map that represents the bank in case of a transaction failure. Although this is not a real transaction rollback mechanism that would be implemented in a database, it provides a way to handle errors and maintain consistency in the state of the accounts.
 
 
-Code and syntax improvements:
+Code improvements:
 - The code is refined by replacing print statements with a logger to improve the handling of messages.
 - String formatting is used instead of concatenation to ensure code clarity and maintainability.
 - Constants are used to represent log messages, error messages, and default values to improve code readability.
 - To minimize the occurrence of calculations that are performed multiple times, such as multiplying the number of accounts and default deposit, these computations have been separated to execute only once.
 - Smaller methods have been implemented to handle atomic operations such as transferring money, generating BigDecimal values, and validating input values to improve code modularity and reusability.
 - Map interface is used instead of HashMap implementation to make code depend on abstractions and improve flexibility, according to dependency inversion principle.
-- A check is added to determine if an account exists, and if not, a NoSuchElementException is thrown.
+- A check is added to determine if an account exists, and if not, a NoSuchElementException is thrown. In addition, another check is added to disable registering account with a number that already exists.
 - Unit tests are included to verify the accuracy and functionality of methods used for getting and registering accounts, as well as withdrawing and depositing money.
 
 
 Domain improvements:
 - Money value is represented by BigDecimal, which allows for better precision, a crucial factor when dealing with money.
 - Negative money value now results in an exception being thrown, enforcing the restriction that money cannot be negative.
+- To create a simulated bank system, the project structure is updated to include an Account class that models an account, and a Bank class that acts as a service to handle bank operations such as registering accounts, retrieving accounts by their number, and transferring money between accounts. The Bank service also includes private methods for withdraw and deposit operations, as well as methods to validate the amount of money involved in each operation.
 
 
 Other ideas:
@@ -61,9 +62,5 @@ Other ideas:
 different currencies. For the sake of simplicity, in this case there is no new class for Money because it is implied
 that currency is always the same.(https://www.martinfowler.com/eaaCatalog/money.html)
 - By encapsulating money class, operations such as adding and subtracting money can be moved to the Money class, following the single responsibility principle.
-- As an additional improvement, custom exceptions with have pre-defined and formatted messages could be created, so they would not be handled as part of the business logic.
+- As an additional improvement, custom exceptions with pre-defined and formatted messages could be created, so they would not be handled as part of the business logic.
 
-
-Below is a sequence diagram that represents one random money transfer operation:
-
-![Bad_Bank_Random_Operation_Sequence_Diagram](https://user-images.githubusercontent.com/104908897/236853704-7e98f1c5-733d-46e7-9af4-aafd4f533015.png)

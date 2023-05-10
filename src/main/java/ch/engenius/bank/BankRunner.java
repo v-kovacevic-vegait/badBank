@@ -9,6 +9,9 @@ import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ch.engenius.bank.model.Account;
+import ch.engenius.bank.services.Bank;
+
 public class BankRunner {
 
 	private static final int NUMBER_OF_ACCOUNS = 100;
@@ -22,7 +25,7 @@ public class BankRunner {
 
 	private final Random random = new Random(43);
 	private final Bank bank = new Bank();
-
+	
 	public static void main(String[] args) {
 		BankRunner runner = new BankRunner();
 		int accounts = NUMBER_OF_ACCOUNS;
@@ -48,17 +51,10 @@ public class BankRunner {
 	}
 
 	private void runRandomOperation(int maxAccount) {
-		BigDecimal transfer = generateTransferAmount();
-		int accountInNumber = random.nextInt(maxAccount);
-		int accountOutNumber = random.nextInt(maxAccount);
-		Account accountIn = bank.getAccount(accountInNumber);
-		Account accountOut = bank.getAccount(accountOutNumber);
-		transferMoney(accountOut, accountIn, transfer);
-	}
-
-	private void transferMoney(Account sourceAccount, Account targetAccount, BigDecimal transferAmount) {
-		sourceAccount.withdraw(transferAmount);
-		targetAccount.deposit(transferAmount);
+		BigDecimal transferAmount = generateTransferAmount();
+		int sourceAccountNumber = random.nextInt(maxAccount);
+		int targetAccountNumber = random.nextInt(maxAccount);
+		bank.transferMoney(sourceAccountNumber, targetAccountNumber, transferAmount);
 	}
 
 	private BigDecimal generateTransferAmount() {
