@@ -64,3 +64,6 @@ that currency is always the same.(https://www.martinfowler.com/eaaCatalog/money.
 - By encapsulating money class, operations such as adding and subtracting money can be moved to the Money class, following the single responsibility principle.
 - As an additional improvement, custom exceptions with pre-defined and formatted messages could be created, so they would not be handled as part of the business logic.
 
+Below is a sequence diagram that represents one transfer money operation:
+
+![Bad_Bank_Random_Operation_Sequence_Diagram](https://github.com/v-kovacevic-vegait/badBank/assets/104908897/598ee0a9-422f-4b95-9316-f26349f8715d)
